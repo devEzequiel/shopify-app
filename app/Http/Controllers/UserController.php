@@ -16,29 +16,23 @@ use App\Models\ConfirmationCode;
 
 class UserController extends Controller
 {
-    public function login(Request $request): JsonResponse
+    public function login(Request $request)//: JsonResponse
     {
         $request->validate([
-            'email' => 'required|email|min:5|max:100',
-            'password' => 'required|min:8|max:50',
+            'email' => 'required|email|min:8|max:100',
+            'password' => 'required|min:4|max:50',
         ]);
 
-        $user = User::where('email', $request->get('email'))->first();
+        $user = User::where('email', $request->email)->first();
 
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password
-        ];
-
-        if (!Auth::attempt($credentials)){
-            $json['message'] = 'Invalid data';
-            return response()->json($json, 500);
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['Os dados estão incorretos'],
+            ]);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'user' => $user
-        ], 200);
+        return response()->json(['user' => $user,
+                                'token' => $user->createToken($request->email)->plainTextToken], 200);
     }
 
     /**
@@ -103,7 +97,8 @@ class UserController extends Controller
                 $m->from(array(env('MAIL_USERNAME') => 'Ezequiel'));
                 $m->to($user->email, $user->name)->subject('Seu código de verificação é...');
             });
-            return response()->json(['status' => 'success'], 201);
+            return response()->json(['status' => 'success',
+                                        'message' => 'email enviado'], 201);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }

@@ -16,21 +16,26 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::middleware('auth:sanctum')->any('wishlist', [WishListController::class, 'index'])->name('home');
+////    Route::post('/', [WishListController::class, 'index'])->name('home'); //retorna todas os produtos via api
+////    Route::get('wishlist/create', [WishListController::class, 'store']);
+////    Route::get('wishlist', [WishListController::class, 'show']);
+////    Route::get('wishlist/delete/{id}', [WishListController::class, 'destroy']);
+////});
+////route user
+Route::group(['namespace' => 'Wishlist', 'middleware' => ['auth:sanctum'], 'as' => 'wishlist.'], function () {
+
+    //rotas para controles da lista de desejos
+    Route::get('/', [WishListController::class, 'products'])->name('home'); //retorna todas os produtos via api
+    Route::post('wishlist/create', [WishListController::class, 'store']);
+    Route::get('wishlist', [WishListController::class, 'index']);
+    Route::any('wishlist/delete/{id}', [WishListController::class, 'destroy']);
 });
-//route user
+
 Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
     //rotas para controle de usuário
-    Route::get('login', [UserController::class, 'login'])->name('login');
-    Route::get('logout', [UserController::class, 'logout'])->name('logout');
-    Route::get('signup', [UserController::class, 'store'])->name('signup');
-
-    //rotas para controles da lista de desejos
-    Route::get('/', [WishListController::class, 'index'])->name('home'); //retorna todas os produtos via api
-    Route::get('wishlist/create', [WishListController::class, 'store']);
-    Route::get('wishlist', [WishListController::class, 'show']);
-    Route::get('wishlist/delete/{id}', [WishListController::class, 'destroy']);
+    Route::post('login', [UserController::class, 'login'])->name('login');
+    Route::delete('logout', [UserController::class, 'logout'])->name('logout');
+    Route::post('signup', [UserController::class, 'store'])->name('signup');
 });
-

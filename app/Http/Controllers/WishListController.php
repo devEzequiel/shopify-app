@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 
 class WishListController extends Controller
 {
-    public function index()
+    public function products()
     {
         $products_data = Http::withBasicAuth('269a1ec67dfdd434dfc8622a0ed77768',
             '4e788173c35d04421ab4793044be622f')
@@ -25,14 +25,10 @@ class WishListController extends Controller
 //        return response()->json(['products_name' => $products_name]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     *
-     */
-    public function show(Request $request)
+
+    public function index(Request $request)
     {
-        $products = Wishlist::where('costumer_id', $request->get('costumer_id'))->get();
+        $products = Wishlist::where('costumer_id', Auth::id())->get();
         return $products;
     }
 
@@ -44,16 +40,20 @@ class WishListController extends Controller
      */
     public function store(Request $request)//: JsonResponse
     {
+        $request->validate([
+            'product_id' => 'required'
+        ]);
+
         $products = Wishlist::where('product_id', $request->get('product_id'))
-            ->where('costumer_id', $request->get('costumer_id'))
+            ->where('costumer_id', Auth::id())
             ->first();
 
         if (!empty($products)) {
-            return response()->json(['message' => 'produto já adicionado à sua lista de desejos'],  500);
+            return response()->json(['message' => 'produto já adicionado à sua lista de desejos'], 500);
         }
 
         $product = new Wishlist();
-        $product->costumer_id = $request->get('costumer_id');
+        $product->costumer_id = Auth::id();
         $product->product_id = $request->get('product_id');
         $product->save();
 
@@ -62,27 +62,19 @@ class WishListController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  \App\Models\Wishlist  $products
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Wishlist $products)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Wishlist  $products
-     * @return \Illuminate\Http\Response
+     * @param  string
+     * @return JsonResponse|\Illuminate\Http\Response
      */
-    public function destroy(Wishlist $products)
+    public function destroy(string $products)
     {
-        echo Auth::user();
-//        $products = Wishlist::where('product_id', $products)
-//                            ->where('id', auth()->user()->getAuthIdentifier());
+        $products = Wishlist::where('product_id', $products)
+            ->where('costumer_id', Auth::id())->delete();
+        if ($products) {
+            return response()->json(['message' => 'produto removido da lista de desejos'], 200);
+        }
+        return response()->json(['message' => 'produto não encontrado na sua lista de desejos'], 500);
+
     }
 }

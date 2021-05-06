@@ -23,10 +23,10 @@ class ConfirmationCodeController extends Controller
      */
     public function validation(Request $request): JsonResponse
     {
-//        $request->validate([
-//            'email' => 'required|email|min:5|max:200|',
-//            'code' => 'required|min:7|max:10'
-//        ]);
+        $request->validate([
+            'email' => 'required|email|min:5|max:200|',
+            'code' => 'required|min:7|max:10'
+        ]);
         $confirmation_code = ConfirmationCode::where('code', '=', $request->get('code'))->first();
         if(!$confirmation_code || ($confirmation_code->email != $request->get('email'))){
             throw ValidationException::withMessages([
