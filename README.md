@@ -1,62 +1,198 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<h1 align="center">
+    Shopify Laravel APP
+</h1>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<h4 align="center">
+    Uma api feita com Laravel 8
+</h4>
 
-## About Laravel
+---
+[**Acesse a documentação via POSTMAN**](https://documenter.getpostman.com/view/15603180/TzRPkA7z)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Dependencies | Version
+--- | --- |
+Composer  | latest | 
+Laravel  | latest |
+MySQL   |  =>5.7
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Para utilizar a API siga as instruções abaixo.
 
-## Learning Laravel
+Primeiro, insira as migrations no banco de dados
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```apacheconf
+    php artisan migrate
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Alimente o banco de dados utilizando o comando
 
-## Laravel Sponsors
+```apacheconf
+php artisan db:seed
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Execute o servidor laravel localmente
 
-### Premium Partners
+```apacheconf
+php artisan serve
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
 
-## Contributing
+### Rotas da Api
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## api/signup
+Rota para criar um novo usuário. Envia um email com ó codigo de confirmação de conta para o usuário. 
+#### Exemplo de entrada #
 
-## Code of Conduct
+```javascript
+{
+	"name": "Ezequiel Oliveira",
+	"email": "ezequiel@gmail.com",
+	"password": "12345678",
+	"password_confirmation": "12345678"
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Exemplo de saida #
 
-## Security Vulnerabilities
+```javascript
+{
+  "status": "success"
+  "message": "email enviado"
+}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## api/email-confirmation
 
-## License
+Rota para confirmação do email.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Exemplo de entrada #
+
+```javascript
+{
+	"email": "ezequiel@gmail.com",
+	"code": "A7SJJDS8"
+}
+```
+
+#### Exemplo de saida #
+
+```javascript
+{
+  "status": "success"
+}
+```
+
+## api/resend-code
+Rota para receber o codigo novamente.
+#### Exemplo de entrada #
+
+```javascript
+{
+	"email": "ezequiel@gmail.com"
+}
+```
+
+#### Exemplo de saida #
+
+```javascript
+{
+  "status": "success"
+}
+```
+
+## api/login
+Rota para fazer a autenticação do usuário, utilizando sanctum, que retorna um bearer token.
+#### Exemplo de entrada #
+
+```javascript
+{
+	"email": "ezequiel@gmail.com"
+	"password": "12345678"
+}
+```
+
+#### Exemplo de saida #
+
+```javascript
+{
+   "user": {
+        "id": 1,
+        "name": "Ezequiel El Mago",
+        "email": "ezequieleso10@gmail.com",
+        "email_verified_at": "2021-05-06T13:07:54.000000Z",
+        "created_at": "2021-05-06T13:01:29.000000Z",
+        "updated_at": "2021-05-06T13:07:54.000000Z"
+   },
+   "token": "1|JKEAU6dALeNDFEr25fdaDVUEjp77Ijk542E9xMSY"
+}
+```
+
+
+### Rotas autenticáveis
+
+Essas rotas podem ser acessadas utilizando o token (do tipo bearer) que é retornado no ato do login.
+
+## api/
+Retorna todos os items já pré cadastrados no banco de dados.
+#### Exemplo de saida #
+
+```javascript
+{
+    {
+        "id": "4543367512203",
+        "name": "Boné preto"
+    },
+    {
+        "id": "4538642956427",
+        "name": "Camiseta Send4Lovers"
+    }
+}
+```
+
+## api/wishlist
+retorna todos os itens que foram adicionados à lista de desejos do usuário.
+
+#### Exemplo de saída #
+
+```javascript
+{
+    {
+        "id": 20,
+        "costumer_id": "1",
+        "product_id": "4543367512203",
+        "created_at": "2021-05-06T16:31:07.000000Z",
+        "updated_at": "2021-05-06T16:31:07.000000Z"
+    }
+}
+```
+
+##api/wishlist/create
+Rota para adicionar um novo produto à lista de desejos
+#### Exemplo de entrada #
+
+```javascript
+{
+	"product_id": "287215271721",
+}
+```
+
+#### Exemplo de saida #
+
+```javascript
+{
+  "status": "success"
+}
+```
+
+##api/wishlist/delete/{id}
+Rota para remover um produto da lista de desejos do usuário.
+#### Exemplo de saida #
+
+```javascript
+{
+  "message": "produto removido da lista de desejos"
+}
+```
+
+
