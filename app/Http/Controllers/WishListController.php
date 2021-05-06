@@ -2,22 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Models\Wishlist;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class WishListController extends Controller
 {
     public function products()
     {
-        $products_data = Http::withBasicAuth('269a1ec67dfdd434dfc8622a0ed77768',
-            '4e788173c35d04421ab4793044be622f')
-            ->get('https://send4-avaliacao.myshopify.com/admin/api/2020-01/products.json');
-        return response($products_data);
-    }
+        $products = DB::select('SELECT * FROM products');
+        for ($x = 0; $x < count($products); $x++) {
+            $json [$x] = [
+                "id" => $products[$x]->product_id,
+                "name" => $products[$x]->name
+            ];
+        }
 
+        return response()->json($json);
+    }
 
     public function index(Request $request)
     {
@@ -41,16 +49,30 @@ class WishListController extends Controller
             ->where('costumer_id', Auth::id())
             ->first();
 
+        //verifica se o produto j''a está na wishlist do usuário
         if (!empty($products)) {
             return response()->json(['message' => 'produto já adicionado à sua lista de desejos'], 500);
         }
 
-        $product = new Wishlist();
-        $product->costumer_id = Auth::id();
-        $product->product_id = $request->get('product_id');
-        $product->save();
+        try {
+            $product = new Wishlist();
+            $product->costumer_id = Auth::id();
+            $product->product_id = $request->get('product_id');
+            $product->save();
 
-        return response()->json(['status' => 'success'], 201);
+            //recuperar o nome do produto e enviar um email
+            $product_name = DB::select('SELECT name FROM products WHERE product_id = ?',
+                [$request->get('product_id')]);
+
+            Mail::send('products', ['product' => $product_name[0]->name, 'name' => Auth::user()->name], function ($m){
+                $m->from(array(env('MAIL_USERNAME') => env('MAIL_FROM_NAME')));
+                $m->to(Auth::user()->email, Auth::user()->name)
+                    ->subject('Novo produto adicionado à sua lista de desejos');
+            });
+            return response()->json(['status' => 'success'], 201);
+        } catch (Exception $e){
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
+        }
 
     }
 
@@ -62,10 +84,23 @@ class WishListController extends Controller
      */
     public function destroy(string $products)
     {
-        $products = Wishlist::where('product_id', $products)
-            ->where('costumer_id', Auth::id())->delete();
-        if ($products) {
-            return response()->json(['message' => 'produto removido da lista de desejos'], 200);
+        $product_name = DB::select('SELECT name FROM products WHERE product_id = ?',
+            [$products]);
+        try {
+            $products = Wishlist::where('product_id', $products)
+                ->where('costumer_id', Auth::id())->delete();
+            if ($products) {
+
+                Mail::send('remove', ['product' => $product_name[0]->name, 'name' => Auth::user()->name],
+                    function ($m) {
+                        $m->from(array(env('MAIL_USERNAME') => env('MAIL_FROM_NAME')));
+                        $m->to(Auth::user()->email, Auth::user()->name)
+                            ->subject('Item removido da sua lista de desejos');
+                    });
+                return response()->json(['message' => 'produto removido da lista de desejos'], 200);
+            }
+        } catch (Exception $e){
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }
         return response()->json(['message' => 'produto não encontrado na sua lista de desejos'], 500);
 
