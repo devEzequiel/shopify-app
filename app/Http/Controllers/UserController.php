@@ -25,43 +25,20 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['Os dados estão incorretos'],
+                'message' => ['Os dados estão incorretos'],
+            ]);
+        } elseif (is_null($user->email_verified_at)) {
+            throw ValidationException::withMessages([
+                'message' => ['O email ainda não foi validado'],
             ]);
         }
 
-        return response()->json(['user' => $user,
-                                'token' => $user->createToken($request->email)->plainTextToken], 200);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function show()//: JsonResponse
-    {
-//        try {
-//            $user = Auth::user();
-//            return response()->json(['status' => 'success', 'user' => $user], 200);
-//        } catch (Exception $e) {
-//            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 401);
-//        }
-        if(Auth::check() == true){
-//            return response()->json(['message' => 'login já feito'], 401);
-            //return redirect()-
-            echo 'ok';
-        } else {
-            $code = strtoupper(substr(bin2hex(random_bytes(4)), 1));
-            echo $code;
-        }
-    }
-
-    private function authenticated()
-    {
-        $user = User::where('id', Auth::user()->id);
-        $user->udpdate([
-            ''
-        ]);
+        return response()->json([
+            'user' => $user,
+            'token' => $user->createToken($request->email)->plainTextToken
+        ], 200);
     }
 
     public function logout(): JsonResponse
@@ -92,19 +69,22 @@ class UserController extends Controller
             $confirmation_code->email = $user->email;
             $confirmation_code->save();
             $user->save();
-//            Mail::send(new checkEmail($user, $code));
+
             Mail::send('email', ['code' => $code], function ($m) use ($user) {
-                $m->from(array(env('MAIL_USERNAME') => 'Ezequiel'));
-                $m->to($user->email, $user->name)->subject('Seu código de verificação é...');
+                $m->from(array(env('MAIL_USERNAME') => env('MAIL_FROM_NAME')));
+                $m->to($user->email, $user->name)->subject('Código de verificação do email');
             });
-            return response()->json(['status' => 'success',
-                                        'message' => 'email enviado'], 201);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'email enviado'
+            ], 201);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }
     }
 
-    protected function failedValidation(Validator $validator) {
+    protected function failedValidation(Validator $validator)
+    {
         throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

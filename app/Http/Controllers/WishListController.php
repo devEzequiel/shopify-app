@@ -16,13 +16,6 @@ class WishListController extends Controller
             '4e788173c35d04421ab4793044be622f')
             ->get('https://send4-avaliacao.myshopify.com/admin/api/2020-01/products.json');
         return response($products_data);
-
-        //decoding the json and returning name list
-//        $products = json_decode($products_data);
-//        for ($x = 0; $x < count($products->products); $x++) {
-//            $products_name[] = ($products->products[$x]->title);
-//        }
-//        return response()->json(['products_name' => $products_name]);
     }
 
 

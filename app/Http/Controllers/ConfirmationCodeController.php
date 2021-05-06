@@ -49,12 +49,11 @@ class ConfirmationCodeController extends Controller
         $user = User::where('email', $request->get('email'))->first();
 
         //verifica se email existe na verificação e se existe apaga
-        $delete_code = ConfirmationCode::where('email', '=', $user->email)->first();
-        $delete_code && $delete_code->delete();
-
         // cria codigo de verificação e adiciona um objeto com
         // os dados do email e codigo e também os salva.
         try {
+            $delete_code = ConfirmationCode::where('email', '=', $user->email)->first();
+            $delete_code && $delete_code->delete();
             $code = strtoupper(substr(bin2hex(random_bytes(4)), 1));
         } catch (Exception $e) {
             return response()->json(['status' => 'erro', 'message' => $e->getMessage()]);
@@ -66,7 +65,10 @@ class ConfirmationCodeController extends Controller
 
         // classe instanciada da pasta mail que envia o email de
         // acordo com o template criado na view
-        Mail::send(new checkEmail($user, $code));
+        Mail::send('email', ['code' => $code], function ($m) use ($user) {
+            $m->from(array(env('MAIL_USERNAME') => env('MAIL_FROM_NAME')));
+            $m->to($user->email, $user->name)->subject('Código de verificação do email [Reenvio]');
+        });
         return response()->json(['status' => 'success'], 201);
     }
 }
