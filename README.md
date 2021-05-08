@@ -28,7 +28,9 @@
 
 <br>
 ---
+
 ## Dependências
+
 <br>
 Dependencies | Version
 --- | --- |
