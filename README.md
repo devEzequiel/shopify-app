@@ -11,6 +11,25 @@
 
 ---
 
+
+## Índice
+* [Dependências](#-dependências)
+* [Rotas](#-rotas)
+    * [Rotas Públicas](#-rotas-públicas)
+        * [Cadastro](#-api/signup)
+        * [Confirmação de Email](#-api/email-confirmation)
+        * [Reenvio do Código](#-api/resend-code)
+        * [Login](#-api/login)
+    * [Rotas Privadas](#-rotas-privadas)
+        * [Home](#-api/)
+        * [Lista de Desejos do Usuário](#-api/wishlist)
+        * [Adicionar Novo Produto à Lista](#-api/wishlist/create)
+        * [Remover Produto da Lista](#-api/wishlist/delete/{product_id)
+
+<br>
+---
+## Dependências
+<br>
 Dependencies | Version
 --- | --- |
 Composer  | latest | 
@@ -39,9 +58,11 @@ Execute o servidor laravel localmente
 --- 
 <br>
 
-### Rotas da Api
+##  Rotas #
 
-## api/signup
+###  Rotas Públicas #
+
+## api/signup #
 
 Rota para criar um novo usuário. Envia um email com o codigo de confirmação de conta para o usuário.
 
@@ -137,7 +158,7 @@ Rota para fazer a autenticação do usuário, utilizando sanctum, que retorna um
 ---
 <br>
 
-### Rotas autenticáveis
+### Rotas Privadas
 
 Essas rotas podem ser acessadas utilizando o token (do tipo bearer) que é retornado no ato do login.
 
@@ -198,7 +219,7 @@ Rota para adicionar um novo produto à lista de desejos
 }
 ```
 
-## api/wishlist/delete/{id}
+## api/wishlist/delete/{product_id}
 
 Rota para remover um produto da lista de desejos do usuário.
 
