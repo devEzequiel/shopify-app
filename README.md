@@ -15,7 +15,7 @@ Dependencies | Version
 --- | --- |
 Composer  | latest | 
 Laravel  | latest |
-MySQL   |  =>5.7
+MySQL   |  >=5.7
 
 Para utilizar a API siga as instruções abaixo.
 
