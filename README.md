@@ -48,9 +48,9 @@ Rota para criar um novo usuário. Envia um email com o codigo de confirmação d
 ```javascript
 {
     "name": "Ezequiel Oliveira",
-	"email": "ezequiel@gmail.com",
-	"password": "12345678",
-	"password_confirmation": "12345678"
+    "email": "ezequiel@gmail.com",
+    "password": "12345678",
+    "password_confirmation": "12345678"
 }
 ```
 
@@ -71,8 +71,8 @@ Rota para confirmação do email.
 
 ```javascript
 {
-	"email": "ezequiel@gmail.com",
-	"code": "A7SJJDS8"
+    "email": "ezequiel@gmail.com",
+    "code": "A7SJJDS8"
 }
 ```
 
@@ -112,8 +112,8 @@ Rota para fazer a autenticação do usuário, utilizando sanctum, que retorna um
 
 ```javascript
 {
-	"email": "ezequiel@gmail.com"
-	"password": "12345678"
+    "email": "ezequiel@gmail.com"
+    "password": "12345678"
 }
 ```
 
