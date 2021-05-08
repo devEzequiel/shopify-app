@@ -15,7 +15,7 @@ Dependencies | Version
 --- | --- |
 Composer  | latest | 
 Laravel  | latest |
-MySQL   |  >=5.7
+MySQL   |  > =5.7
 
 Para utilizar a API siga as instruções abaixo.
 
@@ -28,25 +28,26 @@ Primeiro, insira as migrations no banco de dados
 Alimente o banco de dados utilizando o comando
 
 ```apacheconf
-php artisan db:seed
+    php artisan db:seed
 ```
 
 Execute o servidor laravel localmente
 
 ```apacheconf
-php artisan serve
+    php artisan serve
 ```
-
 
 ### Rotas da Api
 
 ## api/signup
-Rota para criar um novo usuário. Envia um email com o codigo de confirmação de conta para o usuário. 
+
+Rota para criar um novo usuário. Envia um email com o codigo de confirmação de conta para o usuário.
+
 #### Exemplo de entrada #
 
 ```javascript
 {
-	"name": "Ezequiel Oliveira",
+    "name": "Ezequiel Oliveira",
 	"email": "ezequiel@gmail.com",
 	"password": "12345678",
 	"password_confirmation": "12345678"
@@ -57,8 +58,8 @@ Rota para criar um novo usuário. Envia um email com o codigo de confirmação d
 
 ```javascript
 {
-  "status": "success"
-  "message": "email enviado"
+    "status": "success"
+    "message": "email enviado"
 }
 ```
 
@@ -79,17 +80,19 @@ Rota para confirmação do email.
 
 ```javascript
 {
-  "status": "success"
+    "status": "success"
 }
 ```
 
 ## api/resend-code
+
 Rota para receber o codigo novamente.
+
 #### Exemplo de entrada #
 
 ```javascript
 {
-	"email": "ezequiel@gmail.com"
+   "email": "ezequiel@gmail.com"
 }
 ```
 
@@ -97,12 +100,14 @@ Rota para receber o codigo novamente.
 
 ```javascript
 {
-  "status": "success"
+    "status": "success"
 }
 ```
 
 ## api/login
+
 Rota para fazer a autenticação do usuário, utilizando sanctum, que retorna um bearer token.
+
 #### Exemplo de entrada #
 
 ```javascript
@@ -128,13 +133,14 @@ Rota para fazer a autenticação do usuário, utilizando sanctum, que retorna um
 }
 ```
 
-
 ### Rotas autenticáveis
 
 Essas rotas podem ser acessadas utilizando o token (do tipo bearer) que é retornado no ato do login.
 
 ## api/
+
 Retorna todos os items já pré cadastrados no banco de dados.
+
 #### Exemplo de saida #
 
 ```javascript
@@ -151,6 +157,7 @@ Retorna todos os items já pré cadastrados no banco de dados.
 ```
 
 ## api/wishlist
+
 retorna todos os itens que foram adicionados à lista de desejos do usuário.
 
 #### Exemplo de saída #
@@ -168,7 +175,9 @@ retorna todos os itens que foram adicionados à lista de desejos do usuário.
 ```
 
 ## api/wishlist/create
+
 Rota para adicionar um novo produto à lista de desejos
+
 #### Exemplo de entrada #
 
 ```javascript
@@ -181,17 +190,19 @@ Rota para adicionar um novo produto à lista de desejos
 
 ```javascript
 {
-  "status": "success"
+     "status": "success"
 }
 ```
 
 ## api/wishlist/delete/{id}
+
 Rota para remover um produto da lista de desejos do usuário.
+
 #### Exemplo de saida #
 
 ```javascript
 {
-  "message": "produto removido da lista de desejos"
+    "message": "produto removido da lista de desejos"
 }
 ```
 
