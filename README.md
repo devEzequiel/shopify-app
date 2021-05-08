@@ -13,18 +13,18 @@
 
 
 ## Índice
-* [Dependências](#-dependências)
-* [Rotas](#-rotas)
-    * [Rotas Públicas](#-rotas-públicas)
-        * [Cadastro](#-api/signup)
-        * [Confirmação de Email](#-api/email-confirmation)
-        * [Reenvio do Código](#-api/resend-code)
-        * [Login](#-api/login)
-    * [Rotas Privadas](#-rotas-privadas)
-        * [Home](#-api/)
-        * [Lista de Desejos do Usuário](#-api/wishlist)
-        * [Adicionar Novo Produto à Lista](#-api/wishlist/create)
-        * [Remover Produto da Lista](#-api/wishlist/delete/{product_id)
+* [Dependências](#dependências)
+* [Rotas](#rotas)
+    * [Rotas Públicas](#rotas-públicas)
+        * [Cadastro](#apisignup)
+        * [Confirmação de Email](#apiemail-confirmation)
+        * [Reenvio do Código](#apiresend-code)
+        * [Login](#apilogin)
+    * [Rotas Privadas](#rotas-privadas)
+        * [Home](#api)
+        * [Lista de Desejos do Usuário](#apiwishlist)
+        * [Adicionar Novo Produto à Lista](#apiwishlistcreate)
+        * [Remover Produto da Lista](#apiwishlistdeleteproduct_id)
 
 <br>
 
