@@ -12,7 +12,7 @@
 ---
 
 
-## Índice
+# Índice
 * [Dependências](#dependências)
 * [Rotas](#rotas)
     * [Rotas Públicas](#rotas-públicas)
@@ -30,7 +30,7 @@
 
 ---
 
-## Dependências
+# Dependências
 
 <br>
 
@@ -62,11 +62,13 @@ Execute o servidor laravel localmente
 --- 
 <br>
 
-##  Rotas #
+#  Rotas #
 
-###  Rotas Públicas #
+##  Rotas Públicas #
 
-## api/signup #
+<br>
+
+### api/signup #
 
 Rota para criar um novo usuário. Envia um email com o codigo de confirmação de conta para o usuário.
 
@@ -90,7 +92,7 @@ Rota para criar um novo usuário. Envia um email com o codigo de confirmação d
 }
 ```
 
-## api/email-confirmation
+### api/email-confirmation
 
 Rota para confirmação do email.
 
@@ -111,7 +113,7 @@ Rota para confirmação do email.
 }
 ```
 
-## api/resend-code
+### api/resend-code
 
 Rota para receber o codigo novamente.
 
@@ -131,7 +133,7 @@ Rota para receber o codigo novamente.
 }
 ```
 
-## api/login
+### api/login
 
 Rota para fazer a autenticação do usuário, utilizando sanctum, que retorna um bearer token.
 
@@ -162,11 +164,11 @@ Rota para fazer a autenticação do usuário, utilizando sanctum, que retorna um
 ---
 <br>
 
-### Rotas Privadas
+## Rotas Privadas
 
 Essas rotas podem ser acessadas utilizando o token (do tipo bearer) que é retornado no ato do login.
 
-## api/
+### api/
 
 Retorna todos os items já pré cadastrados no banco de dados.
 
@@ -185,7 +187,7 @@ Retorna todos os items já pré cadastrados no banco de dados.
 }
 ```
 
-## api/wishlist
+### api/wishlist
 
 retorna todos os itens que foram adicionados à lista de desejos do usuário.
 
@@ -203,7 +205,7 @@ retorna todos os itens que foram adicionados à lista de desejos do usuário.
 }
 ```
 
-## api/wishlist/create
+### api/wishlist/create
 
 Rota para adicionar um novo produto à lista de desejos
 
@@ -223,7 +225,7 @@ Rota para adicionar um novo produto à lista de desejos
 }
 ```
 
-## api/wishlist/delete/{product_id}
+### api/wishlist/delete/{product_id}
 
 Rota para remover um produto da lista de desejos do usuário.
 
