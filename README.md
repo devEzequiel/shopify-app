@@ -41,7 +41,7 @@ php artisan serve
 ### Rotas da Api
 
 ## api/signup
-Rota para criar um novo usuário. Envia um email com ó codigo de confirmação de conta para o usuário. 
+Rota para criar um novo usuário. Envia um email com o codigo de confirmação de conta para o usuário. 
 #### Exemplo de entrada #
 
 ```javascript
@@ -167,7 +167,7 @@ retorna todos os itens que foram adicionados à lista de desejos do usuário.
 }
 ```
 
-##api/wishlist/create
+## api/wishlist/create
 Rota para adicionar um novo produto à lista de desejos
 #### Exemplo de entrada #
 
@@ -185,7 +185,7 @@ Rota para adicionar um novo produto à lista de desejos
 }
 ```
 
-##api/wishlist/delete/{id}
+## api/wishlist/delete/{id}
 Rota para remover um produto da lista de desejos do usuário.
 #### Exemplo de saida #
 
