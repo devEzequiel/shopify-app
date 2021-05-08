@@ -42,13 +42,17 @@ MySQL   |  >= 5.7
 
 Para utilizar a API siga as instruções abaixo.
 
-Primeiro, insira as migrations no banco de dados
+Primeiro crie um Base de Dados no banco MySQL com o nome de ```shopify_app```
+
+Após criada a tabela, acesse o arquivo ```.env``` na aplicação e altere a ```DB_DATABASE``` para ```DB_DATABASE=shopify_app```
+
+Após, insira as migrations no banco de dados, adicionando o comando abaixo em seu terminal
 
 ```apacheconf
     php artisan migrate
 ```
 
-Alimente o banco de dados utilizando o comando
+Depois, alimente o banco de dados utilizando o comando
 
 ```apacheconf
     php artisan db:seed
@@ -59,7 +63,7 @@ Execute o servidor laravel localmente
 ```apacheconf
     php artisan serve
 ```
---- 
+---
 <br>
 
 #  Rotas #
