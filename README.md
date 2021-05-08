@@ -36,6 +36,8 @@ Execute o servidor laravel localmente
 ```apacheconf
     php artisan serve
 ```
+--- 
+<br>
 
 ### Rotas da Api
 
@@ -132,6 +134,8 @@ Rota para fazer a autenticação do usuário, utilizando sanctum, que retorna um
    "token": "1|JKEAU6dALeNDFEr25fdaDVUEjp77Ijk542E9xMSY"
 }
 ```
+---
+<br>
 
 ### Rotas autenticáveis
 
