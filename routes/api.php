@@ -45,10 +45,3 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
         ->name('resend_code');
 });
 
-Route::get('email/enviar', function (){
-    $user = new stdClass();
-    $user->name = 'Drake';
-    $user->email =  'ezequieleso10@gmail.com';
-
-    \App\Jobs\SendEmail::dispatch($user)->delay(now()->addMinutes('3'));
-});
