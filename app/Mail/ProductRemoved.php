@@ -2,26 +2,28 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
-class SendMailUser extends Mailable
+class ProductRemoved extends Mailable
 {
-    private User $user;
     use Queueable, SerializesModels;
+
+    public string $product;
+    public string $name;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, string $code)
+    public function __construct($product)
     {
-        $this->user = $user;
-        $this->code = $code;
+        $this->product = $product;
+        $this->name = Auth::user()->name;
     }
 
     /**
@@ -31,6 +33,8 @@ class SendMailUser extends Mailable
      */
     public function build()
     {
-        return $this->view('email', ['code' => $this->code]);
+        $this->subject('Item removido da sua lista de desejos');
+        $this->to(Auth::user()->email, Auth::user()->name);
+        return $this->view('remove');
     }
 }

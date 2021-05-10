@@ -44,3 +44,11 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::post('resend-code', [ConfirmationCodeController::class, 'resend'])
         ->name('resend_code');
 });
+
+Route::get('email/enviar', function (){
+    $user = new stdClass();
+    $user->name = 'Drake';
+    $user->email =  'ezequieleso10@gmail.com';
+
+    \App\Jobs\SendEmail::dispatch($user)->delay(now()->addMinutes('3'));
+});

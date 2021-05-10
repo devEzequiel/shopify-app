@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewProductAdded;
+use App\Mail\ProductRemoved;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Models\Wishlist;
@@ -61,14 +63,11 @@ class WishListController extends Controller
             $product->save();
 
             //recuperar o nome do produto e enviar um email
-            $product_name = DB::select('SELECT name FROM products WHERE product_id = ?',
-                [$request->get('product_id')]);
+            $product_name = DB::table('products')
+                ->where('product_id', '=', [$request->get('product_id')])
+                ->first();
+            Mail::send(new NewProductAdded($product_name->name));
 
-            Mail::send('products', ['product' => $product_name[0]->name, 'name' => Auth::user()->name], function ($m){
-                $m->from(array(env('MAIL_USERNAME') => env('MAIL_FROM_NAME')));
-                $m->to(Auth::user()->email, Auth::user()->name)
-                    ->subject('Novo produto adicionado à sua lista de desejos');
-            });
             return response()->json(['status' => 'success'], 201);
         } catch (Exception $e){
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
@@ -84,19 +83,14 @@ class WishListController extends Controller
      */
     public function destroy(string $products)
     {
-        $product_name = DB::select('SELECT name FROM products WHERE product_id = ?',
-            [$products]);
+        $product_name = DB::table('products')
+            ->where('product_id', '=', [$products])
+            ->first();
         try {
             $products = Wishlist::where('product_id', $products)
                 ->where('costumer_id', Auth::id())->delete();
             if ($products) {
-
-                Mail::send('remove', ['product' => $product_name[0]->name, 'name' => Auth::user()->name],
-                    function ($m) {
-                        $m->from(array(env('MAIL_USERNAME') => env('MAIL_FROM_NAME')));
-                        $m->to(Auth::user()->email, Auth::user()->name)
-                            ->subject('Item removido da sua lista de desejos');
-                    });
+                Mail::send(new ProductRemoved($product_name->name));
                 return response()->json(['message' => 'produto removido da lista de desejos'], 200);
             }
         } catch (Exception $e){

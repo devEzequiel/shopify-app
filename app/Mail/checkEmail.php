@@ -10,8 +10,8 @@ use Illuminate\Queue\SerializesModels;
 class checkEmail extends Mailable
 {
     use Queueable, SerializesModels;
-    private $user;
-    private $code;
+    private User $user;
+    private string $code;
 
     /**
      * Create a new message instance.
@@ -32,8 +32,7 @@ class checkEmail extends Mailable
     public function build(): checkEmail
     {
         $this->subject('Seu código de verificação é...');
-        $this->from($this->user->email);
-        $this->to($this->user->name);
+        $this->to($this->user->email, $this->user->name);
         return $this->view('email', ['code' => $this->code]);
     }
 }

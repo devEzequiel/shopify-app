@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\checkEmail;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -60,7 +61,7 @@ class UserController extends Controller
         $user->name = $request->get('name');
         $user->email = $request->get('email');
         $user->password = Hash::make($request->get('password'));
-//        dd(env('MAIL_USERNAME'));
+
         try {
             //generate hexadecimal //transaction
             $code = strtoupper(substr(bin2hex(random_bytes(4)), 1));
@@ -70,10 +71,8 @@ class UserController extends Controller
             $confirmation_code->save();
             $user->save();
 
-            Mail::send('email', ['code' => $code], function ($m) use ($user) {
-                $m->from(array(env('MAIL_USERNAME') => env('MAIL_FROM_NAME')));
-                $m->to($user->email, $user->name)->subject('Código de verificação do email');
-            });
+            Mail::send(new checkEmail($user, $code));
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'email enviado'
