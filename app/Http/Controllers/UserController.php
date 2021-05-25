@@ -68,8 +68,8 @@ class UserController extends Controller
             $confirmation_code = new ConfirmationCode();
             $confirmation_code->code = $code;
             $confirmation_code->email = $user->email;
-            $confirmation_code->save();
-            $user->save();
+//            $confirmation_code->save();
+//            $user->save();
 
             Mail::send(new checkEmail($user, $code));
 

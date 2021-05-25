@@ -12,8 +12,8 @@ class NewProductAdded extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public string $product;
-    public string $name;
+    public $product;
+    public $name;
 
     /**
      * Create a new message instance.

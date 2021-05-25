@@ -33,6 +33,7 @@ class checkEmail extends Mailable
     {
         $this->subject('Seu código de verificação é...');
         $this->to($this->user->email, $this->user->name);
+
         return $this->view('email', ['code' => $this->code]);
     }
 }
