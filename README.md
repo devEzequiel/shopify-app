@@ -42,20 +42,24 @@ MySQL   |  >= 5.7
 
 Para utilizar a API siga as instruções abaixo.
 
-Primeiro crie um Base de Dados no banco MySQL com o nome de ```shopify_app```
-
-Após criada a tabela, acesse o arquivo ```.env``` na aplicação e altere a ```DB_DATABASE``` para ```DB_DATABASE=shopify_app```
-
-Após, insira as migrations no banco de dados, adicionando o comando abaixo em seu terminal
+No terminal execute os seguintes comandos:
 
 ```apacheconf
-    php artisan migrate
+    composer install
 ```
 
-Depois, alimente o banco de dados utilizando o comando
+```apacheconf
+    php artisan key:generate
+```
+
+Depois, crie uma Base de Dados no MySQL.
+
+Após criada o BD, acesse o arquivo ```config/database.php``` e configure de acordo com sua máquina.
+
+Posteriormente, insira as migrations no banco de dados, adicionando o comando abaixo em seu terminal
 
 ```apacheconf
-    php artisan db:seed
+    php artisan migrate:fresh --seed
 ```
 
 Execute o servidor laravel localmente
